@@ -70,7 +70,7 @@ def  map_size_for_blue_zone_area(area):
 
 def calculate_required_shrink_phase1(map_name, num_players):
     """
-    Calculate shrink for existing first phase at start so play area per player will be the same after first phase (with delay/wait at 0 and move at sum of original delay/wait/move).
+    Calculate alternative shrink for existing first phase so, after the first phase, the play area per player will be the same as for a full match.
 
     >>> calculate_required_shrink_phase1('Karakin', 10)
     0.2174065891365761
@@ -79,21 +79,24 @@ def calculate_required_shrink_phase1(map_name, num_players):
     """
     m = next(m for m in maps if m['name'] == map_name)
     first_map_size = m['map_size'] * m['phases'][0]['shrink']
-    return calculate_required_shrink(m, num_players, first_map_size)
+    return _calculate_required_shrink(m, num_players, first_map_size)
 
 
 def calculate_required_shrink_phase0(map_name, num_players):
     """
-    Calculate shrink for prepended phase at start so play area per player will be the same (with prepended phase's delay/wait/move at 0).
+    Calculate shrink for "prepended" phase (with delay/wait/move at 0) so, at game start, the play area per player will be the same as for a full match.
+
+    ("Prepending" a phase in a custom match's rules will require deleting a later phase as you can only have 9 phases. Probably you want
+    to delete the penultimate one as you want the latest phase's tiny shrink and high dps to make the game stop eventually.)
 
     >>> calculate_required_shrink_phase0('Karakin', 10)
     0.39528470752104744
     """
     m = next(m for m in maps if m['name'] == map_name)
     first_map_size = m['map_size']
-    return calculate_required_shrink(m, num_players, first_map_size)
+    return _calculate_required_shrink(m, num_players, first_map_size)
 
-def calculate_required_shrink(m, num_players, first_map_size):
+def _calculate_required_shrink(m, num_players, first_map_size):
     first_blue_zone_area = blue_zone_area(first_map_size)
 
     required_blue_zone_area = first_blue_zone_area / m['num_players'] * num_players
