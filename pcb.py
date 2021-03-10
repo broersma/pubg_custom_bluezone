@@ -44,10 +44,6 @@ def blue_zone_diameter(map_size):
     return math.sqrt(2*map_size**2)
 
 
-def blue_zone_diameter(map_size):
-    return math.sqrt(2*map_size**2)
-
-
 def blue_zone_radius(map_size):
     return blue_zone_diameter(map_size) / 2
 
